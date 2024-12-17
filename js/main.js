@@ -23,7 +23,7 @@ function addItem(event) {
   li.classList.add('items');
   li.appendChild(document.createTextNode(newItem));
 
-  const button = createBtn('remove-item btn-link error');
+  const button = createBtn('remove-item btn-link');
   li.appendChild(button);
 
   // Add li to DOM
@@ -55,7 +55,7 @@ function createBtn(classes) {
   const button = document.createElement('button');
   button.className = classes;
 
-  const icon = createIcon('fa-solid fa-skull-crossbones');
+  const icon = createIcon('fa-solid fa-xmark hover:text-red-500');
   button.appendChild(icon);
   return button;
 }
