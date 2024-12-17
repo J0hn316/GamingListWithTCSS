@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+      integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/main.js"></script>
+    <title>Gaming List 🎮</title>
+  </head>
+
+  <body class="font-poppins text-[16px] leading-6 text-base text-black bg-zinc-700">
+    <!-- Container -->
+    <div class="max-w-[500px] mx-auto my-8 p-5">
+      <!-- Header -->
+      <header class="flex items-center justify-start mb-5">
+        <img src="/images/GameIcon.png" alt="GameIcon" class="w-16 h-16">
+        <h1 class="font-light ml-2">
+          Gaming List
+        </h1>
+      </header>
+      <!-- Form -->
+      <form id="item-form">
+        <!-- Input Field -->
+        <div class="mb-5">
+          <input type="text" class="w-full text-lg p-2 border border-lime-500 rounded-md outline-none" id="item-input"
+            name="item" placeholder="Enter Item" />
+        </div>
+        <!-- Submit Button -->
+        <div class="mb-5">
+          <button type="submit"
+            class="bg-gray-800 text-lightblue rounded-md px-5 py-2 hover:bg-gray-700 flex items-center">
+            Add Game 🎮
+            <i class="fa-solid"></i>
+          </button>
+        </div>
+      </form>
+      <!-- Filter Input -->
+      <div class="mb-5">
+        <input type="text" class="w-full text-lg p-2 border-b border-yellow-400 bg-transparent outline-none" id="filter"
+          placeholder="Filter Items" />
+      </div>
+      <!-- Item List -->
+      <ul id="item-list" class="mt-5 flex flex-wrap">
+      </ul>
+
+      <!-- Clear Button -->
+      <button id="clear"
+        class="mt-5 w-full text-lg bg-transparent text-limeGreen border border-limeGreen rounded-md px-5 py-2 hover:bg-primary">
+        Clear All
+      </button>
+    </div>
+
+  </body>
+
+</html>
