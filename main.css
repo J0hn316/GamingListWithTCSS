@@ -6,12 +6,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.error {
-  color: red;
-}
-
-.icon {
-  color: #93c5fd;
+.edit-mode {
+  color: aquamarine;
 }
 
 .btn-link {

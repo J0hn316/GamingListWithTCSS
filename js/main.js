@@ -4,24 +4,15 @@ const itemForm = document.getElementById('item-form');
 const itemList = document.getElementById('item-list');
 const itemInput = document.getElementById('item-input');
 
-function isDarkMode() {
-  // Check if 'dark' class is present on <html>
-  return document.documentElement.classList.contains('dark');
+let isEditMode = false;
+
+function displayItems() {
+  const itemsFromStorage = getItemsFromStorage();
+  itemsFromStorage.forEach((item) => addItemToDom(item));
+  checkUI();
 }
 
-function toggleItemClass(el) {
-  // Remove both classes first
-  el.classList.remove('items-dark', 'items-light');
-
-  // Add the appropriate class based on dark mode
-  if (isDarkMode()) {
-    el.classList.add('items-dark');
-  } else {
-    el.classList.add('items-light');
-  }
-}
-
-function addItem(event) {
+function onAddItemSubmit(event) {
   event.preventDefault();
 
   const newItem = itemInput.value;
@@ -35,13 +26,24 @@ function addItem(event) {
     return;
   }
 
+  // Create item DOM element
+  addItemToDom(newItem);
+
+  // Add item to local storage
+  addItemToStorage(newItem);
+
+  checkUI();
+  itemInput.value = '';
+}
+
+function addItemToDom(item) {
   // Create list item
   const li = document.createElement('li');
   // Dynamically add class based on the mode
   toggleItemClass(li);
 
   // Add item text
-  li.appendChild(document.createTextNode(newItem));
+  li.appendChild(document.createTextNode(item));
 
   const button = createBtn('remove-item btn-link');
   button.classList.add('text-black', 'dark:text-white'); // Ensure button text color matches
@@ -49,26 +51,68 @@ function addItem(event) {
 
   // Add li to DOM
   itemList.appendChild(li);
-  checkUI();
-
-  itemInput.value = '';
 }
 
-function removeItem(event) {
+function addItemToStorage(item) {
+  // Get existing items from storage
+  const itemsFromStorage = getItemsFromStorage();
+
+  itemsFromStorage.push(item); // Add the new item to the array.
+
+  // Convert to JSON string and set to local storage
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+}
+
+function getItemsFromStorage() {
+  let itemsFromStorage;
+
+  // Check if items are in storage.
+  if (localStorage.getItem('items') === null) {
+    itemsFromStorage = []; // If not, create an empty array.
+  } else {
+    itemsFromStorage = JSON.parse(localStorage.getItem('items')); // If so, parse the string into an array.
+  }
+  return itemsFromStorage;
+}
+
+function onClickItem(event) {
   const element = event.target.parentElement.classList;
+
   // target the x/skull button on the item
   if (element.contains('remove-item')) {
-    if (confirm('Are you sure?')) {
-      const parentElement = event.target.parentElement.parentElement;
-      parentElement.remove();
-      checkUI();
-    }
+    const parentElement = event.target.parentElement.parentElement;
+    removeItem(parentElement);
+  } else {
+    const clickedItem = event.target;
+    setItemToEdit(clickedItem);
   }
 }
 
-function updateAllItems() {
-  const items = document.querySelectorAll('#item-list li');
-  items.forEach((li) => toggleItemClass(li));
+function setItemToEdit(item) {
+  isEditMode = true;
+  item.style.color = 'aquamarine';
+}
+
+function removeItem(itemElement) {
+  if (confirm('Are you sure?')) {
+    // Remove item from DOM
+    itemElement.remove();
+
+    // Remove item from storage
+    removeItemFromStorage(itemElement.textContent);
+
+    checkUI();
+  }
+}
+
+function removeItemFromStorage(itemContent) {
+  let itemsFromStorage = getItemsFromStorage();
+
+  // Filter out item to be removed
+  itemsFromStorage = itemsFromStorage.filter((item) => item !== itemContent);
+
+  // Re-set to local storage
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
 }
 
 function createIcon(classes) {
@@ -91,6 +135,8 @@ function clearItems() {
     // clear the list
     itemList.removeChild(itemList.firstChild);
   }
+  // Clear from localStorage
+  localStorage.removeItem('items');
   checkUI();
 }
 
@@ -108,6 +154,28 @@ function filterItems(event) {
   });
 }
 
+function updateAllItems() {
+  const items = document.querySelectorAll('#item-list li');
+  items.forEach((li) => toggleItemClass(li));
+}
+
+function toggleItemClass(el) {
+  // Remove both classes first
+  el.classList.remove('items-dark', 'items-light');
+
+  // Add the appropriate class based on dark mode
+  if (isDarkMode()) {
+    el.classList.add('items-dark');
+  } else {
+    el.classList.add('items-light');
+  }
+}
+
+function isDarkMode() {
+  // Check if 'dark' class is present on <html>
+  return document.documentElement.classList.contains('dark');
+}
+
 function checkUI() {
   const items = itemList.querySelectorAll('li');
 
@@ -120,11 +188,18 @@ function checkUI() {
   }
 }
 
-// Event Listeners
-itemForm.addEventListener('submit', addItem);
-itemList.addEventListener('click', removeItem);
-clearBtn.addEventListener('click', clearItems);
-itemFilter.addEventListener('input', filterItems);
-document.addEventListener('theme-changed', updateAllItems);
+// Initialize app
+function init() {
+  // Event Listeners
+  clearBtn.addEventListener('click', clearItems);
+  itemList.addEventListener('click', onClickItem);
+  itemFilter.addEventListener('input', filterItems);
+  itemForm.addEventListener('submit', onAddItemSubmit);
+  document.addEventListener('DOMContentLoaded', displayItems);
+  document.addEventListener('theme-changed', updateAllItems);
 
-checkUI();
+  // Check UI on page load
+  checkUI();
+}
+
+init();
