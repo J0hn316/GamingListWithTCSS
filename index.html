@@ -30,12 +30,12 @@
       <!-- Header -->
       <header class="relative flex items-center justify-start mb-5">
         <img src="/images/GameIcon.png" alt="GameIcon" class="w-16 h-16 dark:invert">
-        <h1 class="font-light ml-2 text-primaryLight">
+        <h1 class="font-light ml-2 text-black dark:text-white">
           Gaming List
         </h1>
         <!-- Dark/Light Mode Button -->
         <button id="theme-toggle"
-          class="absolute text-primaryLight right-2 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-primaryLight dark:focus:ring-primaryLight rounded-lg text-sm p-2.5">
+          class="absolute text-primaryLight right-2 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-black dark:focus:ring-white rounded-lg text-sm p-2.5">
           <!-- Dark SVG Icon -->
           <svg id="theme-toggle-dark-icon" class="w-5 h-5 fill-black dark:fill-white hidden" fill="currentColor"
             viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -54,13 +54,14 @@
       <form id="item-form">
         <!-- Input Field -->
         <div class="mb-5">
-          <input type="text" class="w-full text-lg p-2 outline-none focus:border-2 border-primaryLight rounded-md"
-            id="item-input" name="item" placeholder="Enter Item" />
+          <input type="text"
+            class="w-full text-lg p-2 rounded-md border-2 border-black focus:border-2 dark:border-white" id="item-input"
+            name="item" placeholder="Enter Item" />
         </div>
         <!-- Submit Button -->
         <div class="mb-5">
           <button type="submit"
-            class="bg-primaryLight text-white rounded-md px-5 py-2 hover:bg-white hover:border-primaryLight hover:outline hover:text-primaryLight flex items-center">
+            class="bg-black dark:bg-white text-white dark:text-black rounded-md px-5 py-2 hover:bg-black hover:border-primaryLight hover:outline hover:text-primaryLight flex items-center">
             Add Game 🎮
             <i class="fa-solid"></i>
           </button>
@@ -68,7 +69,8 @@
       </form>
       <!-- Filter Input -->
       <div class="mb-5">
-        <input type="text" class="w-full text-lg p-2 border-b border-secondary text-black bg-transparent outline-none"
+        <input type="text"
+          class="w-full text-black dark:text-white text-lg p-2 border-b border-black bg-transparent outline-none dark:border-white"
           id="filter" placeholder="Filter Items" />
       </div>
       <!-- Item List -->
@@ -77,7 +79,7 @@
 
       <!-- Clear Button -->
       <button id="clear"
-        class="mt-5 w-full text-lg text-white border bg-primaryLight rounded-md px-5 py-2 hover:bg-white hover:text-primaryLight hover:outline hover:border-primaryLight">
+        class="mt-5 w-full text-lg text-white border bg-black rounded-md px-5 py-2 hover:text-white hover:outline hover:border-primaryLight dark:text-black dark:bg-white">
         Clear All
       </button>
     </div>

@@ -41,6 +41,8 @@ function toggleMode() {
       localStorage.setItem('color-theme', 'dark');
     }
   }
+  // Dispatch an event to update existing items
+  document.dispatchEvent(new Event('theme-changed'));
 }
 
 toggleIcon();

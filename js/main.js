@@ -4,13 +4,30 @@ const itemForm = document.getElementById('item-form');
 const itemList = document.getElementById('item-list');
 const itemInput = document.getElementById('item-input');
 
+function isDarkMode() {
+  // Check if 'dark' class is present on <html>
+  return document.documentElement.classList.contains('dark');
+}
+
+function toggleItemClass(el) {
+  // Remove both classes first
+  el.classList.remove('items-dark', 'items-light');
+
+  // Add the appropriate class based on dark mode
+  if (isDarkMode()) {
+    el.classList.add('items-dark');
+  } else {
+    el.classList.add('items-light');
+  }
+}
+
 function addItem(event) {
   event.preventDefault();
 
   const newItem = itemInput.value;
 
   // Validate Input
-  if (itemInput.value === '') {
+  if (newItem.trim() === '') {
     const p = document.createElement('p');
     p.classList.add('error');
     p.innerText = 'Please add an item';
@@ -20,10 +37,14 @@ function addItem(event) {
 
   // Create list item
   const li = document.createElement('li');
-  li.classList.add('items');
+  // Dynamically add class based on the mode
+  toggleItemClass(li);
+
+  // Add item text
   li.appendChild(document.createTextNode(newItem));
 
   const button = createBtn('remove-item btn-link');
+  button.classList.add('text-black', 'dark:text-white'); // Ensure button text color matches
   li.appendChild(button);
 
   // Add li to DOM
@@ -45,9 +66,14 @@ function removeItem(event) {
   }
 }
 
+function updateAllItems() {
+  const items = document.querySelectorAll('#item-list li');
+  items.forEach((li) => toggleItemClass(li));
+}
+
 function createIcon(classes) {
   const icon = document.createElement('i');
-  icon.className = classes;
+  icon.className = `${classes} !hover:text-red-500`;
   return icon;
 }
 
@@ -55,7 +81,7 @@ function createBtn(classes) {
   const button = document.createElement('button');
   button.className = classes;
 
-  const icon = createIcon('fa-solid fa-xmark hover:text-red-500');
+  const icon = createIcon('fa-solid fa-xmark text-white dark:text-black');
   button.appendChild(icon);
   return button;
 }
@@ -99,5 +125,6 @@ itemForm.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeItem);
 clearBtn.addEventListener('click', clearItems);
 itemFilter.addEventListener('input', filterItems);
+document.addEventListener('theme-changed', updateAllItems);
 
 checkUI();

@@ -22,11 +22,25 @@
   cursor: pointer;
 }
 
-.items {
+.items-dark {
   display: flex;
   justify-content: space-between;
   width: 45%;
-  color: #fff;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #93c5fd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 0 5px 20px;
+  font-weight: 700;
+}
+
+.items-light {
+  display: flex;
+  justify-content: space-between;
+  width: 45%;
+  color: #fff; /* Black text for light mode */
+  background-color: #000; /* Light blue background */
   border: 1px solid #93c5fd;
   border-radius: 5px;
   padding: 10px 15px;
