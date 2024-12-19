@@ -3,13 +3,14 @@ const itemFilter = document.getElementById('filter');
 const itemForm = document.getElementById('item-form');
 const itemList = document.getElementById('item-list');
 const itemInput = document.getElementById('item-input');
+const formBtn = itemForm.querySelector('button');
 
 let isEditMode = false;
 
 function displayItems() {
   const itemsFromStorage = getItemsFromStorage();
   itemsFromStorage.forEach((item) => addItemToDom(item));
-  checkUI();
+  resetUI();
 }
 
 function onAddItemSubmit(event) {
@@ -19,11 +20,23 @@ function onAddItemSubmit(event) {
 
   // Validate Input
   if (newItem.trim() === '') {
-    const p = document.createElement('p');
-    p.classList.add('error');
-    p.innerText = 'Please add an item';
-    itemInput.insertAdjacentElement('afterend', p);
+    alert('Please add an item');
     return;
+  }
+
+  // Check for edit mode
+  if (isEditMode) {
+    const itemToEdit = itemList.querySelector('.edit-mode');
+
+    removeItemFromStorage(itemToEdit.textContent);
+    itemToEdit.classList.remove('edit-mode');
+    itemToEdit.remove();
+    isEditMode = false;
+  } else {
+    if (checkIfItemExists(newItem)) {
+      alert('That item already exists');
+      return;
+    }
   }
 
   // Create item DOM element
@@ -32,7 +45,7 @@ function onAddItemSubmit(event) {
   // Add item to local storage
   addItemToStorage(newItem);
 
-  checkUI();
+  resetUI();
   itemInput.value = '';
 }
 
@@ -88,9 +101,20 @@ function onClickItem(event) {
   }
 }
 
+function checkIfItemExists(item) {
+  const itemsFromStorage = getItemsFromStorage();
+  return itemsFromStorage.includes(item);
+}
+
 function setItemToEdit(item) {
   isEditMode = true;
-  item.style.color = 'aquamarine';
+  itemList.querySelectorAll('li').forEach((item) => (item.style.color = ''));
+
+  item.style.color = '#228B22';
+  item.classList.add('edit-mode');
+  formBtn.innerHTML = '<i class="fa-solid fa-pen"></i>Update Item';
+  formBtn.style.backgroundColor = '#228B22';
+  itemInput.value = item.textContent;
 }
 
 function removeItem(itemElement) {
@@ -101,7 +125,7 @@ function removeItem(itemElement) {
     // Remove item from storage
     removeItemFromStorage(itemElement.textContent);
 
-    checkUI();
+    resetUI();
   }
 }
 
@@ -137,7 +161,7 @@ function clearItems() {
   }
   // Clear from localStorage
   localStorage.removeItem('items');
-  checkUI();
+  resetUI();
 }
 
 function filterItems(event) {
@@ -176,7 +200,9 @@ function isDarkMode() {
   return document.documentElement.classList.contains('dark');
 }
 
-function checkUI() {
+function resetUI() {
+  itemInput.value = '';
+
   const items = itemList.querySelectorAll('li');
 
   if (items.length === 0) {
@@ -186,6 +212,11 @@ function checkUI() {
     clearBtn.style.display = 'block';
     itemFilter.style.display = 'block';
   }
+
+  formBtn.innerHTML =
+    '<i class="fa-solid bg-black dark:bg-white"></i> Add Game 🎮';
+  formBtn.style.backgroundColor = '';
+  isEditMode = false;
 }
 
 // Initialize app
@@ -199,7 +230,7 @@ function init() {
   document.addEventListener('theme-changed', updateAllItems);
 
   // Check UI on page load
-  checkUI();
+  resetUI();
 }
 
 init();
